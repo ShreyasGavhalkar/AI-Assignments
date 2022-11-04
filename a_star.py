@@ -5,9 +5,11 @@ class puzzle_instance:
         self.space = [row, col]
         self.state = state
         self.h_score = -1
+
     def move_right(self):
         if(self.space[1] == 2):
-            print("cannot move the space right")
+            # print("cannot move the space right")
+            pass
         else:
             temp = self.state[self.space[0]][self.space[1]+1]
             self.state[self.space[0]][self.space[1]] = temp
@@ -15,7 +17,8 @@ class puzzle_instance:
             self.space = [self.space[0],self.space[1]+1]   
     def move_left(self):
         if(self.space[1] == 0):
-            print("cannot move the space left")
+            pass
+            
         else:
             temp = self.state[self.space[0]][self.space[1]-1]
             self.state[self.space[0]][self.space[1]] = temp
@@ -24,7 +27,8 @@ class puzzle_instance:
 
     def move_up(self):
         if(self.space[0] == 0):
-            print("cannot move the space up")
+            pass
+            
         else:
             temp = self.state[self.space[0]-1][self.space[1]]
             self.state[self.space[0]][self.space[1]] = temp
@@ -33,7 +37,8 @@ class puzzle_instance:
 
     def move_down(self):
         if(self.space[0] == 2):
-            print("cannot move the space down")
+            pass
+            
         else:
             temp = self.state[self.space[0]+1][self.space[1]]
             self.state[self.space[0]][self.space[1]] = temp
@@ -53,17 +58,24 @@ class puzzle_instance:
  
 
 def generate_children(puzzle):
-    state = copy.deepcopy(puzzle.state)
-    space = copy.deepcopy(puzzle.space)
-    temp1 = puzzle_instance(space[0], space[1], state)
-    temp2 = puzzle_instance(space[0], space[1], state)
-    temp3 = puzzle_instance(space[0], space[1], state)
-    temp4 = puzzle_instance(space[0], space[1], state)
-    return []
+    ret = []
+    temp1 = copy.deepcopy(puzzle)
+    temp1.move_left()
+    ret.append(temp1)
+    temp2 = copy.deepcopy(puzzle)
+    temp2.move_right()
+    ret.append(temp2)
+    temp3 = copy.deepcopy(puzzle)
+    temp3.move_up()
+    ret.append(temp3)
+    temp4 = copy.deepcopy(puzzle)
+    temp4.move_down()
+    ret.append(temp4)
+
+    return ret
 
 
 def a_star(puzzle, goal_state):
-    breakpoint()
     closed_list = []
     closed_list.append(puzzle)
     g=0
@@ -71,7 +83,6 @@ def a_star(puzzle, goal_state):
         puzzle.h_score = puzzle.get_h_score(goal_state)
         if puzzle.h_score  == 0:
             print(f"Reached goal at g={g}")
-            closed_list.append(puzzle)
             return closed_list
         else:
             children = generate_children(puzzle)
@@ -91,12 +102,6 @@ def show_path(closed_list):
     for i in closed_list:
         print(i.state)
 
-
-
-
-
-
-
 if __name__ == '__main__':
     first_state = [
     [1,2,3],
@@ -109,8 +114,7 @@ if __name__ == '__main__':
     goal_state = [
     [1,2,3],
     [4,8,6],
-    [7,-1,9]
+    [-1,7,9]
     ]
     ans = a_star(puzzle, goal_state)
     show_path(ans)
-    print("*********************************")
